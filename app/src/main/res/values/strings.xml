@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">The-flow.ru</string>
+
+    <string name="title_section_main">Главная</string>
+    <string name="title_section_about">О приложении</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Настройки</string>
+
+    <string name="developer_string">Разработчик: Илья Исакин</string>
+    <string name="developer_email">ilya.issakin@gmail.com</string>
+    <string name="app_version">Версия 0.1</string>
+</resources>
