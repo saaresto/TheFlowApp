@@ -16,8 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Ilya on 03.06.2015.
  */
-public class FeatureView extends RelativeLayout
-    implements View.OnClickListener{
+public class FeatureView extends RelativeLayout {
 
     private ImageView featureImage;
     private TextView featureHeader;
@@ -32,7 +31,7 @@ public class FeatureView extends RelativeLayout
     public FeatureView(Context context, HashMap values) {
         super(context);
 
-        inflate(getContext(), R.layout.news_item, null);
+        inflate(getContext(), R.layout.news_item, this);
 
         featureImage = (ImageView) this.findViewById(R.id.featureImage);
         featureHeader = (TextView) this.findViewById(R.id.featureHeader);
@@ -44,11 +43,14 @@ public class FeatureView extends RelativeLayout
         featureDescription.setText((String) values.get(ConstantStrings.HASHMAP_FEATURE_DESCRIPTION_KEY));
 
         featureLink = (String) values.get(ConstantStrings.HASHMAP_IMAGE_LINK_KEY);
+
+        this.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO put link in intent and start PostActivity
+                Toast.makeText(view.getContext(), featureLink, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    @Override
-    public void onClick(View view) {
-        // TODO put link in intent and start PostActivity
-        Toast.makeText(view.getContext(), featureHeader.getText(), Toast.LENGTH_LONG);
-    }
 }

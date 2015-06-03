@@ -50,23 +50,6 @@ public class PlaceholderFragment extends Fragment {
 
         try {
 
-            HashMap map = new HashMap();
-            map.put(ConstantStrings.HASHMAP_IMAGE_LINK_KEY, "http://the-flow.ru/uploads/images/resize/300x0/adaptiveResize/15/04/22/97/93/47ac2f540cd7.png");
-            map.put(ConstantStrings.HASHMAP_FEATURE_DESCRIPTION_KEY, "Description");
-            map.put(ConstantStrings.HASHMAP_FEATURE_HEADER_KEY, "Header");
-            map.put(ConstantStrings.HASHMAP_FEATURE_LINK_KEY, "Link");
-
-
-            LinearLayout rl = (LinearLayout)getView().findViewById(R.id.rootLayout);
-            View v = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.news_item, null);
-            rl.addView(v);
-            rl.addView(new FeatureView(getView().getContext(), map));
-            rl.addView(new FeatureView(getView().getContext(), map));
-
-            ImageLoader.getInstance().displayImage("http://the-flow.ru/uploads/images/resize/300x0/adaptiveResize/15/04/22/97/93/47ac2f540cd7.png",
-                    (ImageView) v.findViewById(R.id.featureImage));
-
-            Log.d("LAYOUT", rl.toString());
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("EXCEPTION", e.toString());
@@ -85,5 +68,9 @@ public class PlaceholderFragment extends Fragment {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+
+    public void init() {
+
     }
 }
