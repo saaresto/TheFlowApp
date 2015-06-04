@@ -6,12 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.fragment.AppInfoFragment;
+import com.ilyaissakin.theflowapp.fragment.MainPageFragment;
 import com.ilyaissakin.theflowapp.fragment.NavigationDrawerFragment;
 import com.ilyaissakin.theflowapp.fragment.PlaceholderFragment;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
@@ -41,7 +43,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Main page of the-flow.ru.
      */
-    public static Document mainPage;
+    public static Document mainPage = null;
 
     private static FragmentManager fragmentManager;
 
@@ -77,12 +79,12 @@ public class MainActivity extends ActionBarActivity
         fragmentManager = getSupportFragmentManager();
         if (position == 1) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new AppInfoFragment())
+                    .replace(R.id.container, AppInfoFragment.newInstance())
             //        .addToBackStack("LOL")
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .replace(R.id.container, MainPageFragment.newInstance())
                     .commit();
         }
     }
@@ -133,26 +135,4 @@ public class MainActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-    private class MainPageLoaderTask extends AsyncTask {
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-        }
-
-        @Override
-        protected Object doInBackground(Object[] objects) {
-            try {
-                MainActivity.mainPage = Jsoup.connect(ConstantStrings.ROOT_LINK_WITH_PROTOCOL)
-                        .get();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(getBaseContext(), "Не удалось загрузить страницу", Toast.LENGTH_LONG).show();
-            }
-
-            return null;
-        }
-    }
-
 }

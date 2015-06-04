@@ -47,13 +47,6 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("EXCEPTION", e.toString());
-        }
     }
 
     @Override
@@ -68,9 +61,5 @@ public class PlaceholderFragment extends Fragment {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
-    }
-
-    public void init() {
-
     }
 }

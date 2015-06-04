@@ -15,10 +15,10 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Eminem выпустил песню 'Phenomenal'"
+        android:ellipsize="end"
         android:id="@+id/featureHeader"
         android:layout_alignTop="@+id/featureImage"
         android:layout_toRightOf="@+id/featureImage"
@@ -28,7 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Она станет саундтреком к боксерской драме, в которой артист изначально должен был сыграть главную роль"
         android:ellipsize="end"
         android:singleLine="true"
         android:id="@+id/featureDescription"

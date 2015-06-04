@@ -22,6 +22,10 @@ public class AppInfoFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static AppInfoFragment newInstance() {
+        return new AppInfoFragment();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

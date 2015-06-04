@@ -15,7 +15,7 @@ public class ConstantStrings {
     public static String ROOT_LINK_WITH_PROTOCOL = "http://the-flow.ru";
     public static String MAINPAGE_ITEM_SELECTOR = ".items > .publication__item";
     public static String ITEM_PHOTO_SELECTOR = "publication__item-photo";
-    public static String ITEM_HEADER_SELECTOR = "publication__item-title";
+    public static String ITEM_HEADER_SELECTOR = ".publication__item-title > a";
     public static String ITEM_DESCRIPTION_SELECTOR = "publication__item-text";
     public static String ITEM_LINK_SELECTOR = "hover_shadow";
 }

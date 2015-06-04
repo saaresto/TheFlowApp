@@ -48,7 +48,7 @@ public class FeatureView extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 // TODO put link in intent and start PostActivity
-                Toast.makeText(view.getContext(), featureLink, Toast.LENGTH_LONG).show();
+                Toast.makeText(view.getContext(), featureHeader.getText(), Toast.LENGTH_LONG).show();
             }
         });
     }
