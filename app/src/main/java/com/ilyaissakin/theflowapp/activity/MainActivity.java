@@ -1,70 +1,106 @@
 package com.ilyaissakin.theflowapp.activity;
 
-import android.os.AsyncTask;
+import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.fragment.AppInfoFragment;
 import com.ilyaissakin.theflowapp.fragment.MainPageFragment;
-import com.ilyaissakin.theflowapp.fragment.NavigationDrawerFragment;
-import com.ilyaissakin.theflowapp.fragment.PlaceholderFragment;
-import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends Activity {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+    private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+    private String[] mItemsTitles;
 
     /**
      * Main page of the-flow.ru.
      */
-    public static Document mainPage = null;
+    public static Document lastRequestedMainPage = null;
+    public static ArrayList<Elements> mainPageElements = new ArrayList<Elements>();
 
-    private static FragmentManager fragmentManager;
+    private static android.app.FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mTitle = mDrawerTitle = getTitle();
+        mItemsTitles = getResources().getStringArray(R.array.drawer_items_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mItemsTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+        ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) {
+            selectItem(0);
+        }
 
         // Set up the image loader.
         DisplayImageOptions dio = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
+                /*.postProcessor(new BitmapProcessor() {
+                    @Override
+                    public Bitmap process(Bitmap bmp) {
+                        return Bitmap.createScaledBitmap(bmp, 300, 300, false);
+                    }
+                })*/
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(dio)
@@ -73,56 +109,21 @@ public class MainActivity extends ActionBarActivity
         ImageLoader.getInstance().init(config);
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        fragmentManager = getSupportFragmentManager();
-        if (position == 1) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, AppInfoFragment.newInstance())
-            //        .addToBackStack("LOL")
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, MainPageFragment.newInstance())
-                    .commit();
-        }
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section_main);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section_about);
-                break;
-        }
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -131,8 +132,71 @@ public class MainActivity extends ActionBarActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_refresh) {
+            mainPageElements = new ArrayList<>();
+            lastRequestedMainPage = null;
+            MainPageFragment.pageToLoad = 0;
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, MainPageFragment.newInstance())
+                    .commit();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+        // update the main content by replacing fragments
+        fragmentManager = getFragmentManager();
+        if (position == 1) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, AppInfoFragment.newInstance())
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, MainPageFragment.newInstance())
+                    .commit();
+        }
+
+        // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mItemsTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggls
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        /*mainPageElements = new ArrayList<Elements>();
+        lastRequestedMainPage = null;*/
+    }
 }
+

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="100dp"
-    android:padding="10dp"
+    android:padding="5dp"
     android:background="@drawable/border">
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_marginRight="10dp"
         android:id="@+id/featureImage"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:ellipsize="end"
+        android:maxLines="2"
         android:id="@+id/featureHeader"
         android:layout_alignTop="@+id/featureImage"
         android:layout_toRightOf="@+id/featureImage"
@@ -29,7 +30,7 @@
         android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:ellipsize="end"
-        android:singleLine="true"
+        android:maxLines="2"
         android:id="@+id/featureDescription"
         android:layout_below="@+id/featureHeader"
         android:layout_alignLeft="@+id/featureHeader"
