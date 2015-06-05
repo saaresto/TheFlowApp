@@ -13,9 +13,13 @@ public class ConstantStrings {
      * Parser selectors
      */
     public static String ROOT_LINK_WITH_PROTOCOL = "http://the-flow.ru";
-    public static String MAINPAGE_ITEM_SELECTOR = ".items > .publication__item";
-    public static String ITEM_PHOTO_SELECTOR = "publication__item-photo";
-    public static String ITEM_HEADER_SELECTOR = ".publication__item-title > a";
-    public static String ITEM_DESCRIPTION_SELECTOR = "publication__item-text";
-    public static String ITEM_LINK_SELECTOR = "hover_shadow";
+    public static String MAINPAGE_PUB_ITEM_SELECTOR = ".items > .publication__item";
+    public static String PUB_ITEM_PHOTO_SELECTOR = ".publication__item-photo";
+    public static String PUB_ITEM_HEADER_SELECTOR = ".publication__item-title > a";
+    public static String PUB_ITEM_DESCRIPTION_SELECTOR = ".publication__item-text";
+    public static String PUB_ITEM_LINK_SELECTOR = "a.hover_shadow";
+
+    public static String MAINPAGE_POPULAR_ITEM_SELECTOR = ".homepage_slider li.hover_shadow";
+    public static String POPULAR_ITEM_HEADER_SELECTOR = ".homepage_slider__text";
+    public static String POPULAR_ITEM_LINK_SELECTOR = MAINPAGE_POPULAR_ITEM_SELECTOR + " > a";
 }

@@ -22,20 +22,18 @@ import java.util.HashMap;
 public class FeaturesInitializer {
 
     public static void initializeFromDocument(LinearLayout rootLayout, Document mainPage) {
-        Log.d("INITIALIZATION", "Initializing from document.");
-        Elements pItems = mainPage.select(ConstantStrings.MAINPAGE_ITEM_SELECTOR);
+        Elements pItems = mainPage.select(ConstantStrings.MAINPAGE_PUB_ITEM_SELECTOR);
         MainActivity.mainPageElements.add(pItems);
 
         for (Element pItem : pItems) {
             String link = ConstantStrings.ROOT_LINK_WITH_PROTOCOL
-                    + pItem.getElementsByClass(ConstantStrings.ITEM_LINK_SELECTOR).attr("href");
+                    + pItem.select(ConstantStrings.PUB_ITEM_LINK_SELECTOR).get(0).attr("href");
 
             String photoLink = ConstantStrings.ROOT_LINK_WITH_PROTOCOL
-                    + pItem.getElementsByClass(ConstantStrings.ITEM_PHOTO_SELECTOR).attr("src");
+                    + pItem.select(ConstantStrings.PUB_ITEM_PHOTO_SELECTOR).get(0).attr("src");
 
-            Element headerE = pItem.select(ConstantStrings.ITEM_HEADER_SELECTOR).get(0);
-            String header = headerE.text();
-            String description = pItem.getElementsByClass(ConstantStrings.ITEM_DESCRIPTION_SELECTOR).get(0).text();
+            String header = pItem.select(ConstantStrings.PUB_ITEM_HEADER_SELECTOR).get(0).text();
+            String description = pItem.select(ConstantStrings.PUB_ITEM_DESCRIPTION_SELECTOR).get(0).text();
 
             HashMap map = new HashMap(4);
             map.put(ConstantStrings.HASHMAP_FEATURE_HEADER_KEY, header);
@@ -52,18 +50,16 @@ public class FeaturesInitializer {
     }
 
     public static void initializeFromStoredElements(LinearLayout rootLayout, ArrayList<Elements> elements) {
-        Log.d("INITIALIZATION", "Initializing from stored.");
         for (Elements pItems : elements) {
             for (Element pItem : pItems) {
                 String link = ConstantStrings.ROOT_LINK_WITH_PROTOCOL
-                        + pItem.getElementsByClass(ConstantStrings.ITEM_LINK_SELECTOR).attr("href");
+                        + pItem.select(ConstantStrings.PUB_ITEM_LINK_SELECTOR).get(0).attr("href");
 
                 String photoLink = ConstantStrings.ROOT_LINK_WITH_PROTOCOL
-                        + pItem.getElementsByClass(ConstantStrings.ITEM_PHOTO_SELECTOR).attr("src");
+                        + pItem.select(ConstantStrings.PUB_ITEM_PHOTO_SELECTOR).get(0).attr("src");
 
-                Element headerE = pItem.select(ConstantStrings.ITEM_HEADER_SELECTOR).get(0);
-                String header = headerE.text();
-                String description = pItem.getElementsByClass(ConstantStrings.ITEM_DESCRIPTION_SELECTOR).get(0).text();
+                String header = pItem.select(ConstantStrings.PUB_ITEM_HEADER_SELECTOR).get(0).text();
+                String description = pItem.select(ConstantStrings.PUB_ITEM_DESCRIPTION_SELECTOR).get(0).text();
 
                 HashMap map = new HashMap(4);
                 map.put(ConstantStrings.HASHMAP_FEATURE_HEADER_KEY, header);

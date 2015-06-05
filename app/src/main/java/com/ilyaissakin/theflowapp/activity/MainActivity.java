@@ -1,18 +1,23 @@
 package com.ilyaissakin.theflowapp.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.fragment.AppInfoFragment;
@@ -59,7 +64,22 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mItemsTitles));
+                R.layout.drawer_list_item, mItemsTitles){
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView v = (TextView) super.getView(position, convertView, parent);
+                switch (position) {
+                    case 0:
+                        v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_list_black_24dp, 0, 0, 0);
+                        break;
+                    case 1:
+                        v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_info_outline_black_24dp, 0, 0, 0);
+                        break;
+                }
+                return v;
+            }
+        });
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -193,10 +213,13 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        /*mainPageElements = new ArrayList<Elements>();
-        lastRequestedMainPage = null;*/
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mTitle.equals(mItemsTitles[1])) {
+            menu.setGroupVisible(R.id.menu_group, false);
+        } else {
+            menu.setGroupVisible(R.id.menu_group, true);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 }
 
