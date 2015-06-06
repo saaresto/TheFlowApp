@@ -1,8 +1,6 @@
 package com.ilyaissakin.theflowapp.fragment;
 
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,7 +14,7 @@ import android.widget.Toast;
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.activity.MainActivity;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
-import com.ilyaissakin.theflowapp.helpers.FeaturesInitializer;
+import com.ilyaissakin.theflowapp.helpers.PageInitializer;
 
 import org.jsoup.Jsoup;
 
@@ -26,6 +24,7 @@ import org.jsoup.Jsoup;
 public class MainPageFragment extends Fragment {
 
     private LinearLayout rootLayout;
+    private LinearLayout popularLayout;
     public static int pageToLoad = 1;
 
     public MainPageFragment() {
@@ -49,7 +48,8 @@ public class MainPageFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        rootLayout = (LinearLayout) getView().findViewById(R.id.rootLayout);
+        rootLayout = (LinearLayout) getView().findViewById(R.id.featureRootLayout);
+        popularLayout = (LinearLayout) getView().findViewById(R.id.popularLayout);
 
         rootLayout.setOnClickListener(new View.OnClickListener() {
             // TODO убрать костыль. Клик идёт не по вьюшке с лоадмоар, а по всему лэйауту.
@@ -65,15 +65,19 @@ public class MainPageFragment extends Fragment {
         if (MainActivity.lastRequestedMainPage == null) {
             (new MainPageLoaderTask(pageToLoad)).execute();
         } else {
-            initializeFeatures(true);
+            initializePage(true);
         }
+
+
     }
 
-    private void initializeFeatures(boolean fromStored) {
+    private void initializePage(boolean fromStored) {
         if (fromStored) {
-            FeaturesInitializer.initializeFromStoredElements(rootLayout, MainActivity.mainPageElements);
+            PageInitializer.initializeFeaturesFromStoredElements(rootLayout, MainActivity.mainPageElements);
+            PageInitializer.initializePopularFromStoredElements(popularLayout);
         } else {
-            FeaturesInitializer.initializeFromDocument(rootLayout, MainActivity.lastRequestedMainPage);
+            PageInitializer.initializeFeaturesFromDocument(rootLayout, MainActivity.lastRequestedMainPage);
+            PageInitializer.initializePopularFromDocument(popularLayout, MainActivity.lastRequestedMainPage);
         }
     }
 
@@ -112,7 +116,7 @@ public class MainPageFragment extends Fragment {
                 Toast.makeText(getView().getContext(), "Не удалось загрузить данные", Toast.LENGTH_LONG).show();
                 return;
             }
-            initializeFeatures(false);
+            initializePage(false);
         }
     }
 }

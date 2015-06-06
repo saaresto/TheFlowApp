@@ -20,6 +20,6 @@ public class ConstantStrings {
     public static String PUB_ITEM_LINK_SELECTOR = "a.hover_shadow";
 
     public static String MAINPAGE_POPULAR_ITEM_SELECTOR = ".homepage_slider li.hover_shadow";
-    public static String POPULAR_ITEM_HEADER_SELECTOR = ".homepage_slider__text";
-    public static String POPULAR_ITEM_LINK_SELECTOR = MAINPAGE_POPULAR_ITEM_SELECTOR + " > a";
+    public static String POPULAR_ITEM_HEADER_SELECTOR = ".homepage_slider__text > div";
+    public static String POPULAR_ITEM_LINK_SELECTOR = "a";
 }

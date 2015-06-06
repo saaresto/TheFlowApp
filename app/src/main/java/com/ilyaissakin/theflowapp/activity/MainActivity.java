@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
      */
     public static Document lastRequestedMainPage = null;
     public static ArrayList<Elements> mainPageElements = new ArrayList<Elements>();
+    public static Elements popularElements = null;
 
     private static android.app.FragmentManager fragmentManager;
 
@@ -115,15 +116,11 @@ public class MainActivity extends Activity {
         DisplayImageOptions dio = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
-                /*.postProcessor(new BitmapProcessor() {
-                    @Override
-                    public Bitmap process(Bitmap bmp) {
-                        return Bitmap.createScaledBitmap(bmp, 300, 300, false);
-                    }
-                })*/
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(dio)
+                .diskCacheFileCount(20)
+                .diskCacheSize(1024 * 15) // 15Mb
                 .build();
 
         ImageLoader.getInstance().init(config);
@@ -155,6 +152,8 @@ public class MainActivity extends Activity {
         } else if (id == R.id.action_refresh) {
             mainPageElements = new ArrayList<>();
             lastRequestedMainPage = null;
+            popularElements = null;
+
             MainPageFragment.pageToLoad = 0;
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, MainPageFragment.newInstance())

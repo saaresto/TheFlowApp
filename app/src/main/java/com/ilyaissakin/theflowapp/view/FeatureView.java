@@ -31,7 +31,7 @@ public class FeatureView extends RelativeLayout {
     public FeatureView(Context context, HashMap values) {
         super(context);
 
-        inflate(getContext(), R.layout.news_item, this);
+        inflate(getContext(), R.layout.feature_item, this);
 
         featureImage = (ImageView) this.findViewById(R.id.featureImage);
         featureHeader = (TextView) this.findViewById(R.id.featureHeader);

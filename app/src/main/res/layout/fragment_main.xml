@@ -11,9 +11,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rootLayout"
+            android:id="@+id/featureRootLayout"
             android:background="@color/bright_foreground_material_dark"
             android:orientation="vertical">
+            <HorizontalScrollView
+                android:scrollbars="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#525252">
+
+                <LinearLayout
+                    android:id="@+id/popularLayout"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
