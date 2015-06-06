@@ -49,13 +49,14 @@ public class MainActivity extends Activity {
     public static ArrayList<Elements> mainPageElements = new ArrayList<Elements>();
     public static Elements popularElements = null;
 
-    private static android.app.FragmentManager fragmentManager;
+    private android.app.FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fragmentManager = getFragmentManager();
         mTitle = mDrawerTitle = getTitle();
         mItemsTitles = getResources().getStringArray(R.array.drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,8 +120,6 @@ public class MainActivity extends Activity {
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(dio)
-                .diskCacheFileCount(20)
-                .diskCacheSize(1024 * 15) // 15Mb
                 .build();
 
         ImageLoader.getInstance().init(config);
@@ -155,6 +154,7 @@ public class MainActivity extends Activity {
             popularElements = null;
 
             MainPageFragment.pageToLoad = 0;
+            fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, MainPageFragment.newInstance())
                     .commit();
@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /* The click listner for ListView in the navigation drawer */
+    /* The click listener for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -219,6 +219,11 @@ public class MainActivity extends Activity {
             menu.setGroupVisible(R.id.menu_group, true);
         }
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
 
