@@ -67,20 +67,23 @@ public class MainActivity extends Activity {
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mItemsTitles){
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView v = (TextView) super.getView(position, convertView, parent);
-                switch (position) {
-                    case 0:
-                        v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_list_black_24dp, 0, 0, 0);
-                        break;
-                    case 1:
-                        v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_info_outline_black_24dp, 0, 0, 0);
-                        break;
-                }
-                return v;
-            }
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        TextView v = (TextView) super.getView(position, convertView, parent);
+                        switch (position) {
+                            case 0: // главная
+                                v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_list_black_24dp, 0, 0, 0);
+                                break;
+                            case 1: // избранное
+                                v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_favorite_border_black_24dp, 0, 0, 0);
+                                break;
+                            case 2: // о приложении
+                                v.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_info_outline_black_24dp, 0, 0, 0);
+                                break;
+                        }
+                        return v;
+                    }
         });
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -115,7 +118,6 @@ public class MainActivity extends Activity {
 
         // Set up the image loader.
         DisplayImageOptions dio = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
@@ -175,14 +177,23 @@ public class MainActivity extends Activity {
     private void selectItem(int position) {
         // update the main content by replacing fragments
         fragmentManager = getFragmentManager();
-        if (position == 1) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, AppInfoFragment.newInstance())
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, MainPageFragment.newInstance())
-                    .commit();
+
+        switch (position) {
+            case 0: // главная
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, MainPageFragment.newInstance())
+                        .commit();
+                break;
+            case 1: // TODO избранное
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, MainPageFragment.newInstance())
+                        .commit();
+                break;
+            case 2: // о приложении
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, AppInfoFragment.newInstance())
+                        .commit();
+                break;
         }
 
         // update selected item and title, then close the drawer
@@ -213,7 +224,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mTitle.equals(mItemsTitles[1])) {
+        if (mTitle.equals(mItemsTitles[2])) {
             menu.setGroupVisible(R.id.menu_group, false);
         } else {
             menu.setGroupVisible(R.id.menu_group, true);

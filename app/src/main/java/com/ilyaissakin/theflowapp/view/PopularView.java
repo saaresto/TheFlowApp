@@ -1,8 +1,12 @@
 package com.ilyaissakin.theflowapp.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ilyaissakin.theflowapp.R;
+import com.ilyaissakin.theflowapp.activity.MainActivity;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -26,12 +31,13 @@ public class PopularView extends RelativeLayout {
     private ImageView background;
     private TextView text;
     private String link;
+    private boolean isFullHD = true;
 
     public PopularView(Context context) {
         super(context);
     }
 
-    public PopularView(Context context, HashMap values) {
+    public PopularView(final Context context, HashMap values) {
         super(context);
 
         inflate(getContext(), R.layout.popular_item, this);
@@ -44,6 +50,12 @@ public class PopularView extends RelativeLayout {
         final Display display = wm.getDefaultDisplay();
         final Point size = new Point();
         display.getSize(size);
+
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || size.x <= 1080)
+            isFullHD = false;
+
+
         ImageLoader.getInstance()
                 .displayImage((String) values.get(ConstantStrings.HASHMAP_IMAGE_LINK_KEY),
                         background,
@@ -53,13 +65,16 @@ public class PopularView extends RelativeLayout {
                                 .postProcessor(new BitmapProcessor() {
                                     @Override
                                     public Bitmap process(Bitmap bmp) {
-                                        return Bitmap.createScaledBitmap(bmp, size.x, (int) (size.x * 0.489), false);
+                                        if (!isFullHD) {
+                                            return Bitmap.createScaledBitmap(bmp, size.x, (int) (size.x * 0.489), false);
+                                        } else {
+                                            return Bitmap.createScaledBitmap(bmp, size.x / 2, (int) (size.x * 0.489 / 2), false);
+                                        }
                                     }
                                 })
                                 .build());
 
-        text.setWidth(size.x);
-
+        text.setWidth(isFullHD ? size.x / 2 : size.x);
         text.setText((String) values.get(ConstantStrings.HASHMAP_FEATURE_HEADER_KEY));
 
         link = (String) values.get(ConstantStrings.HASHMAP_FEATURE_LINK_KEY);

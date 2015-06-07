@@ -16,6 +16,7 @@
 
     <string-array name="drawer_items_array">
         <item>Главная</item>
+        <item>Избранное</item>
         <item>О приложении</item>
     </string-array>
 </resources>
