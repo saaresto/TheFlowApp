@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ilyaissakin.theflowapp.activity.PublicationActivity">
+    <item
+        android:id="@+id/action_favorite"
+        android:title="@string/to_favorites"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/action_comments"
+        android:title="@string/comments"
+        android:icon="@drawable/ic_chat_bubble_outline_black_24dp"
+        android:showAsAction="ifRoom|withText"
+        />
+</menu>

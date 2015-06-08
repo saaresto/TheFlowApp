@@ -19,4 +19,9 @@
         <item>Избранное</item>
         <item>О приложении</item>
     </string-array>
+    <string name="title_activity_publication">Публикация</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="to_favorites">В избранное</string>
+    <string name="comments">Комментарии</string>
 </resources>

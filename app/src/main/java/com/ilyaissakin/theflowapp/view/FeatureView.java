@@ -1,6 +1,7 @@
 package com.ilyaissakin.theflowapp.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ilyaissakin.theflowapp.R;
+import com.ilyaissakin.theflowapp.activity.PublicationActivity;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -28,7 +30,7 @@ public class FeatureView extends RelativeLayout {
         super(context);
     }
 
-    public FeatureView(Context context, HashMap values) {
+    public FeatureView(final Context context, final HashMap values) {
         super(context);
 
         inflate(getContext(), R.layout.feature_item, this);
@@ -47,8 +49,10 @@ public class FeatureView extends RelativeLayout {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO put link in intent and start PostActivity
-                Toast.makeText(view.getContext(), featureHeader.getText(), Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                Intent intent = new Intent(context, PublicationActivity.class);
+                intent.putExtra(ConstantStrings.INTENT_HASHMAP_KEY, values);
+                context.startActivity(intent);
             }
         });
     }

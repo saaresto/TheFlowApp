@@ -2,10 +2,12 @@ package com.ilyaissakin.theflowapp.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.activity.MainActivity;
+import com.ilyaissakin.theflowapp.activity.PublicationActivity;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -37,7 +40,7 @@ public class PopularView extends RelativeLayout {
         super(context);
     }
 
-    public PopularView(final Context context, HashMap values) {
+    public PopularView(final Context context, final HashMap values) {
         super(context);
 
         inflate(getContext(), R.layout.popular_item, this);
@@ -82,8 +85,10 @@ public class PopularView extends RelativeLayout {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO put link in intent and start PostActivity
-                Toast.makeText(view.getContext(), link, Toast.LENGTH_LONG).show();
+                //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                Intent intent = new Intent(context, PublicationActivity.class);
+                intent.putExtra(ConstantStrings.INTENT_HASHMAP_KEY, values);
+                context.startActivity(intent);
             }
         });
 
