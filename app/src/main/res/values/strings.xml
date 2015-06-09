@@ -24,4 +24,5 @@
     <string name="hello_world">Hello world!</string>
     <string name="to_favorites">В избранное</string>
     <string name="comments">Комментарии</string>
+    <string name="title_activity_disqus">Комментарии</string>
 </resources>

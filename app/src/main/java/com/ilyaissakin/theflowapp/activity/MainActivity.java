@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.fragment.AppInfoFragment;
+import com.ilyaissakin.theflowapp.fragment.FavoritesFragment;
 import com.ilyaissakin.theflowapp.fragment.MainPageFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -184,9 +185,9 @@ public class MainActivity extends Activity {
                         .replace(R.id.content_frame, MainPageFragment.newInstance())
                         .commit();
                 break;
-            case 1: // TODO избранное
+            case 1: // избранное
                 fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, MainPageFragment.newInstance())
+                        .replace(R.id.content_frame, FavoritesFragment.newInstance())
                         .commit();
                 break;
             case 2: // о приложении
@@ -224,7 +225,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mTitle.equals(mItemsTitles[2])) {
+        if (!mTitle.equals(mItemsTitles[0])) {
             menu.setGroupVisible(R.id.menu_group, false);
         } else {
             menu.setGroupVisible(R.id.menu_group, true);

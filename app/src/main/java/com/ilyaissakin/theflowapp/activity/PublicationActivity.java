@@ -10,10 +10,12 @@ import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.CookieManager;
 import android.widget.Toast;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
+import com.ilyaissakin.theflowapp.helpers.DBHelper;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,10 +26,13 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class PublicationActivity extends Activity { // todo проверить, пришли по ссылке или с главной активити
+public class PublicationActivity extends Activity {
 
     private WebView webView;
     private HashMap values;
+    private String disqusId = null;
+    String link = null;
+    String title = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,6 @@ public class PublicationActivity extends Activity { // todo проверить, 
 
         webView = (WebView) findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDefaultTextEncodingName("utf-8");
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
@@ -48,15 +52,16 @@ public class PublicationActivity extends Activity { // todo проверить, 
         webView.getSettings().setPluginState(WebSettings.PluginState.ON);
         webView.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
 
-        Intent intent = getIntent();
-        Log.d("intent", intent.toString());
+        CookieManager cm = CookieManager.getInstance();
 
-        String link = null;
+        Intent intent = getIntent();
+
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             link = String.valueOf(intent.getData());
         } else {
             values = (HashMap)intent.getSerializableExtra(ConstantStrings.INTENT_HASHMAP_KEY);
             link = (String) (values).get(ConstantStrings.HASHMAP_FEATURE_LINK_KEY);
+            title = (String) (values).get(ConstantStrings.HASHMAP_FEATURE_HEADER_KEY);
         }
 
         if (savedInstanceState != null) {
@@ -82,7 +87,20 @@ public class PublicationActivity extends Activity { // todo проверить, 
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_settings:
+            case R.id.action_favorite:
+                DBHelper helper = new DBHelper(this);
+                if (helper.insert(link, title)) {
+                    Toast.makeText(this, "Добавлено в избранное.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Не удалось добавить в избранное. Скорее всего, статья уже там.", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            case R.id.action_comments:
+                if (link != null) {
+                    Intent dsqIntent = new Intent(PublicationActivity.this, DisqusActivity.class);
+                    dsqIntent.putExtra(ConstantStrings.INTENT_DSQID_KEY, link);
+                    PublicationActivity.this.startActivity(dsqIntent);
+                }
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -134,16 +152,18 @@ public class PublicationActivity extends Activity { // todo проверить, 
             }
 
             article = document.select(ConstantStrings.POST_ARTICLE_SELECTOR).get(0);
-            article.select(ConstantStrings.POST_ARTICLE_SELECTOR).remove();
             article.select(ConstantStrings.POST_COUNTERS_SELECTOR).remove();
             article.select(".article__text").last().remove();
-            article.select(".invisible").remove();
+
+            title = article.select(".article__title").text();
 
             Elements images = article.select("img");
             for (Element img : images) {
-                if (!img.attr("src").contains("http")) {
+                if (!img.attr("src").contains("http")
+                        && img.attr("src").length() > 0) {
                     img.attr("src", ConstantStrings.ROOT_LINK_WITH_PROTOCOL + img.attr("src"));
                     img.attr("style", "");
+                    img.attr("width", "");
                 }
             }
 
