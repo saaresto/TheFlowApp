@@ -63,8 +63,8 @@ public class PopularView extends RelativeLayout {
                 .displayImage((String) values.get(ConstantStrings.HASHMAP_IMAGE_LINK_KEY),
                         background,
                         new DisplayImageOptions.Builder()
-                                .cacheInMemory(true)
-                                .cacheOnDisk(true)
+                                //.cacheInMemory(true)
+                                //.cacheOnDisk(true)
                                 .postProcessor(new BitmapProcessor() {
                                     @Override
                                     public Bitmap process(Bitmap bmp) {

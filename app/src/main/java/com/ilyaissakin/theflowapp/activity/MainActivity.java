@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
 
         // Set up the image loader.
         DisplayImageOptions dio = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)
+                //.cacheOnDisk(true)
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .defaultDisplayImageOptions(dio)

@@ -3,8 +3,17 @@
     android:layout_height="match_parent"
     tools:context="com.ilyaissakin.theflowapp.activity.DisqusActivity">
 
+    <RelativeLayout
+        android:id="@+id/popupRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border">
+
+    </RelativeLayout>
+
     <WebView
         android:id="@+id/webView"
+        android:layout_below="@+id/popupRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

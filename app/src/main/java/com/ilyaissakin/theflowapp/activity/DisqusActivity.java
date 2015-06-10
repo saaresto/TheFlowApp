@@ -2,15 +2,22 @@ package com.ilyaissakin.theflowapp.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.ilyaissakin.theflowapp.R;
 import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
@@ -18,6 +25,7 @@ import com.ilyaissakin.theflowapp.helpers.ConstantStrings;
 public class DisqusActivity extends Activity {
 
     private WebView webView;
+    private RelativeLayout root;
     private String disqusId;
 
     @Override
@@ -28,6 +36,7 @@ public class DisqusActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+        root = (RelativeLayout) findViewById(R.id.popupRoot);
         webView = (WebView) findViewById(R.id.webView);
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
@@ -35,10 +44,45 @@ public class DisqusActivity extends Activity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webView.getSettings().setSupportMultipleWindows(true);
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.setWebViewClient(new WebViewClient());
-        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
-        webView.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND);
+        webView.setWebChromeClient(new WebChromeClient() {
+
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+
+                WebView loginView = new WebView(DisqusActivity.this);
+                WebSettings settings = loginView.getSettings();
+                settings.setJavaScriptEnabled(true);
+                settings.setJavaScriptCanOpenWindowsAutomatically(true);
+                settings.setSupportMultipleWindows(true);
+                settings.setUseWideViewPort(false);
+                loginView.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        if (url.contains("success"))
+                            view.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+                        return false;
+                    }
+                });
+                loginView.setWebChromeClient(new WebChromeClient());
+
+                loginView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 400));
+                root.addView(loginView);
+                root.setVisibility(View.VISIBLE);
+
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(loginView);
+                resultMsg.sendToTarget();
+
+                return true;
+            }
+        });
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return false;
+            }
+        });
 
         CookieManager cm = CookieManager.getInstance();
         cm.setAcceptCookie(true);
