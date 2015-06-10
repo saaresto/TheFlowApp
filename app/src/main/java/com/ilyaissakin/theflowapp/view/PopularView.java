@@ -64,7 +64,7 @@ public class PopularView extends RelativeLayout {
                         background,
                         new DisplayImageOptions.Builder()
                                 //.cacheInMemory(true)
-                                //.cacheOnDisk(true)
+                                .cacheOnDisk(true)
                                 .postProcessor(new BitmapProcessor() {
                                     @Override
                                     public Bitmap process(Bitmap bmp) {
