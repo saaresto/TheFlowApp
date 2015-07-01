@@ -23,10 +23,13 @@ import java.util.HashMap;
 public class PageInitializer {
 
     public static void initializeFeaturesFromDocument(LinearLayout rootLayout, Document mainPage) {
+        mainPage.select(".shortnews").remove(); // среди обычных публикаций теперь блоки с короткими ссылками. убрать.
         Elements pItems = mainPage.select(ConstantStrings.MAINPAGE_PUB_ITEM_SELECTOR);
         MainActivity.mainPageElements.add(pItems);
 
         for (Element pItem : pItems) {
+            if (pItem.select(".banner").size() > 0) continue; // они добавили рекламные блоки.
+
             String link = ConstantStrings.ROOT_LINK_WITH_PROTOCOL
                     + pItem.select(ConstantStrings.PUB_ITEM_LINK_SELECTOR).get(0).attr("href");
 
